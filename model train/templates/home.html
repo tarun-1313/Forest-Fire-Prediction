@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FWI Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login {
+            background: white;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .low { color: green; }
+        .medium { color: orange; }
+        .high { color: red; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login">
+    <h1>🔥 FWI Prediction</h1>
+
+    <form action="{{ url_for('predict_datapoint') }}" method="post">
+        <input type="text" name="Temperature" placeholder="🌡 Temperature" required>
+        <input type="text" name="RH" placeholder="💧 Relative Humidity" required>
+        <input type="text" name="Ws" placeholder="💨 Wind Speed" required>
+        <input type="text" name="Rain" placeholder="🌧 Rainfall" required>
+        <input type="text" name="FFMC" placeholder="🔥 FFMC" required>
+        <input type="text" name="DMC" placeholder="🔥 DMC" required>
+        <input type="text" name="ISI" placeholder="🔥 ISI" required>
+        <input type="text" name="Classes" placeholder="📊 Classes" required>
+        <input type="text" name="Region" placeholder="📍 Region" required>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h3>FWI Value: {{ result }}</h3>
+
+        {% if result < 1 %}
+            <h2 class="low">🟢 Low Fire Risk</h2>
+        {% elif result < 2 %}
+            <h2 class="medium">🟡 Medium Fire Risk</h2>
+        {% else %}
+            <h2 class="high">🔴 High Fire Risk</h2>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
